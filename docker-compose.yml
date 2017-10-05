@@ -1,0 +1,20 @@
+version: '3'
+services:
+  db:
+    image: "postgres:9.6"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/db.sql:/docker-entrypoint-initdb.d/01_db.sql
+      - ./db/data.sql:/docker-entrypoint-initdb.d/02_data.sql
+    environment:
+      POSTGRES_DB: rust
+      POSTGRES_PASSWORD: docker
+      POSTGRES_USER: docker
+  web:
+    command: sleep 999
+    build: .
+    ports:
+     - "3000:3000"
+    links:
+      - "db:db"
